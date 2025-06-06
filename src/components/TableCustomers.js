@@ -111,13 +111,12 @@ export default function TableCustomer() {
                 dataSource={customers}
                 keyExpr="customerId"
                 showBorders={true}
+                paging={{ pageSize: 5 }}
                 onRowInserting={handleRowInserting}
                 onRowInserted={handleRowInsertededCustomers}
                 onRowUpdating={handelRowUpdating}
                 onRowUpdated={handleRowUpdated}
-
                 onRowRemoved={handleRowRemoved}
-
             >
                 <Paging enabled={true} />
                 <Editing mode="row" allowUpdating allowDeleting allowAdding />

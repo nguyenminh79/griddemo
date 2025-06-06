@@ -1,0 +1,22 @@
+/* HeaderLayout.css */
+.active-link {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.logo{
+    height: 20px;
+    width: auto;
+    margin-right: 20px;
+}
+.title{
+    font-size: 24px;
+    color: #123;
+    font-weight: bold;
+    margin-right: 20px;
+}
+.navigation{
+    display: flex;
+    align-items: center;
+    padding-left: 20%;
+}

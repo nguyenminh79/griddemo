@@ -90,6 +90,7 @@ export default function TableProducts() {
         dataSource={products}
         keyExpr="productId"
         showBorders={true}
+        paging={{ pageSize: 5 }}
         onRowInserted={handleRowInsertedProducts}
         onRowUpdated={handleRowUpdatedProducts}
         onRowRemoved={handleRowRemovedProducts}
