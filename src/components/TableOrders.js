@@ -59,6 +59,7 @@ export default function TableOrders() {
             }
 
             alert("Thêm đơn hàng thành công");
+            return response.json(); // trả về dữ liệu đơn hàng mới được thêm
 
         },
         update: async (key, values) => {
@@ -78,6 +79,7 @@ export default function TableOrders() {
                 throw new Error(await response.text());
             }
             alert("Cập nhật đơn hàng thành công");
+            return response.json(); // trả về dữ liệu đơn hàng đã cập nhật
         },
         remove: async (key) => {
             const response = await fetch(`https://localhost:7288/api/Orders/${key}`, {
@@ -87,6 +89,7 @@ export default function TableOrders() {
                 throw new Error(await response.text());
             }
             alert("Xoá đơn hàng thành công");
+            return key; // trả về key để DataGrid biết đã xoá thành công
         }
     });
     // const [orders, setOrders] = useState([]);
