@@ -78,7 +78,7 @@ export default function TableCustomer() {
     //             fetchCustomers();
     //             window.alert('Cập nhật khách hàng thành công');
     //         } else {
-                
+
     //             console.error('Lỗi cập nhật khách hàng:', await response.text());
     //             window.alert('Lỗi cập nhật khách hàng không thành công: ' + await response.text());
     //         }
@@ -105,11 +105,20 @@ export default function TableCustomer() {
     //     fetchCustomers();
     // };
     let customerLists = [];
+    //this function to check email not be duplicated
     const validation = (value) => {
         const email = value.email?.toLowerCase();
         const emailExists = customerLists.some(c => c.email?.toLowerCase() === email);
         if (emailExists) {
-            return true; 
+            return true;
+        }
+        return false;
+    };
+    const handelRowUpdating = (e) => {
+        const email = e.data.email?.toLowerCase();
+        const emailExists = customers.some(c => c.customerId !== e.key && c.email?.toLowerCase() === email);
+        if (emailExists) {
+            return true;
         }
         return false;
     };
@@ -125,7 +134,7 @@ export default function TableCustomer() {
             return customerLists;
         },
         insert: async (values) => {
-            if(validation(values)){
+            if (validation(values)) {
                 throw new Error('Email đã tồn tại vui lòng nhập email khác');
             }
             const response = await fetch('https://localhost:7288/api/Customers', {
@@ -133,7 +142,7 @@ export default function TableCustomer() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(values),
             });
-            
+
             if (!response.ok) {
                 throw new Error('Lỗi thêm khách hàng');
             }
@@ -146,7 +155,7 @@ export default function TableCustomer() {
                 ...original,
                 ...values,
             };
-            if(validation(updateCustomer)){
+            if (handelRowUpdating(updateCustomer)) {
                 throw new Error('Email đã tồn tại vui lòng nhập email khác');
             }
             const response = await fetch(`https://localhost:7288/api/Customers/${key}`, {
@@ -179,11 +188,6 @@ export default function TableCustomer() {
                 keyExpr="customerId"
                 showBorders={true}
                 paging={{ pageSize: 5 }}
-                // onRowInserting={handleRowInserting}
-                // onRowInserted={handleRowInsertededCustomers}
-                // onRowUpdating={handelRowUpdating}
-                // onRowUpdated={handleRowUpdated}
-                // onRowRemoved={handleRowRemoved}
             >
                 <Paging enabled={true} />
                 <Editing mode="row" allowUpdating allowDeleting allowAdding />
