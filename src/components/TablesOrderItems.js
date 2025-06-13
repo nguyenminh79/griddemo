@@ -2,23 +2,23 @@ import { useEffect, useState } from 'react';
 import DataGrid, { Column, Editing, Paging, SearchPanel } from 'devextreme-react/data-grid';
 import CustomStore from 'devextreme/data/custom_store';
 export default function TablesOrderItems() {
-    const [products, setProducts] = useState([]);
+    // const [products, setProducts] = useState([]);
     const [orders, setOrders] = useState([]);
     let orderItems = [];
-    const fetchProducts = async () => {
-        try {
-            const responseProducts = await fetch('https://localhost:7288/api/Products');
-            const dataProducts = await responseProducts.json();
-            if (responseProducts.ok) {
-                console.log("Lấy dữ liệu thành công");
-                setProducts(dataProducts);
-            } else {
-                console.error("Lỗi lấy dữ liệu:", responseProducts.text());
-            }
-        } catch (error) {
-            console.error('Lỗi fetch:', error);
-        }
-    };
+    // const fetchProducts = async () => {
+    //     try {
+    //         const responseProducts = await fetch('https://localhost:7288/api/Products');
+    //         const dataProducts = await responseProducts.json();
+    //         if (responseProducts.ok) {
+    //             console.log("Lấy dữ liệu thành công");
+    //             setProducts(dataProducts);
+    //         } else {
+    //             console.error("Lỗi lấy dữ liệu:", responseProducts.text());
+    //         }
+    //     } catch (error) {
+    //         console.error('Lỗi fetch:', error);
+    //     }
+    // };
     const fetchOrders = async () => {
         try {
             const responseOrders = await fetch('https://localhost:7288/api/Orders');
@@ -34,8 +34,7 @@ export default function TablesOrderItems() {
         }
     };
     useEffect(() => {
-
-        fetchProducts();
+        // fetchProducts();
         fetchOrders();
     }, []);
     const validation = async (values) => {
@@ -142,7 +141,7 @@ export default function TablesOrderItems() {
                 <SearchPanel visible={true} highlightCaseSensitive={false} width={500} />
                 <Column dataField="orderItemId" caption="ID" allowEditing={false} width={100} />
                 <Column dataField="orderId" dataType='number' width={100} lookup={{dataSource: orders, valueExpr: "orderId", searchEnabled: 'true', displayExpr: (item) => {
-                        return item ? `ID: ${item.customerId} - ${item.fullName}` : '';
+                        return item ? `${item.orderId}` : '';
                     }}}/>
                 <Column dataField="orderDate" caption="Order Date" dataType='date' format={"dd/MM/yyyy"} allowEditing={false} />
                 <Column dataField="productId" dataType='number' width={100}/>

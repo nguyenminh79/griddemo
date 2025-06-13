@@ -20,6 +20,7 @@ export default function TableOrders() {
     const [orderItems, setOrderItems] = useState([]);
     const [selectedOrder, setSelectedOrder] = useState();
     const [popUp, setPopUp] = useState(false);
+    const [popUpInvoice, setPopUpInvoice] = useState(false);
     const [customers, setCustomers] = useState([]);
     const [products, setProducts] = useState([]);
     const fetchCustomers = async () => {
@@ -154,55 +155,61 @@ export default function TableOrders() {
     };
     const handleViewDetails = async (data) => {
         // console.log(selectedOrder);
-
+        
         const response = await fetch('https://localhost:7288/api/OrderItems');
         if (!response.ok) {
             alert("Error get detail order");
         }
         const result = await response.json();
-        const OrderDetails = await result.filter((e) => e.orderId = data.orderId);
+        const OrderDetails = await result.filter((e) => e.orderId === data.orderId);
+        console.log(OrderDetails)
         setOrderItems(OrderDetails);
         setSelectedOrder(data);
-        console.log(OrderDetails);
+        setPopUpInvoice(true);
     }
 
 
 
 
     const exportCustomFormToPDF = () => {
-    const input = document.getElementById("pdf-content");
+        const input = document.getElementById("pdf-content");
 
-    html2canvas(input).then(canvas => {
-        const imgData = canvas.toDataURL("image/png");
+        html2canvas(input).then(canvas => {
+            const imgData = canvas.toDataURL("image/png");
 
-        // Kích thước gốc của canvas (theo px)
-        const imgWidth = canvas.width;
-        const imgHeight = canvas.height;
+            // Kích thước gốc của canvas (theo px)
+            const imgWidth = canvas.width;
+            const imgHeight = canvas.height;
 
-        // Chuyển đổi từ px sang mm (1px = 0.264583mm)
-        const pdfWidth = imgWidth * 0.264583;
-        const pdfHeight = imgHeight * 0.264583;
+            // Chuyển đổi từ px sang mm (1px = 0.264583mm)
+            const pdfWidth = imgWidth * 0.264583;
+            const pdfHeight = imgHeight * 0.264583;
 
-        // Tạo PDF với đúng kích thước của content
-        const pdf = new jsPDF({
-            orientation: pdfWidth > pdfHeight ? 'landscape' : 'portrait',
-            unit: 'mm',
-            format: [pdfWidth, pdfHeight]
+            // Tạo PDF với đúng kích thước của content
+            const pdf = new jsPDF({
+                orientation: pdfWidth > pdfHeight ? 'landscape' : 'portrait',
+                unit: 'mm',
+                format: [pdfWidth, pdfHeight]
+            });
+
+            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+            pdf.save(`order-${selectedOrder.orderId}.pdf`);
         });
-
-        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-        pdf.save(`order-${selectedOrder.orderId}.pdf`);
-    });
-};
+    };
 
     return (
         <>
-            <div style={{ display: selectedOrder ? 'block' : 'none' }} >
+            <Popup
+                visible={popUpInvoice}
+                title="Order Invoice"
+                onHiding={() => setPopUpInvoice(false)}
+                showCloseButton={true}
+            >
 
                 <div
                     id="pdf-content"
                     style={{
-                        
+
                         padding: '80px 40px', // lề trái phải toàn bộ nội dung
                         fontFamily: 'Arial, sans-serif',
                     }}
@@ -273,9 +280,7 @@ export default function TableOrders() {
                                                 <td style={{ border: '1px dotted black', padding: '10px' }}>{item.productName}</td>
                                                 <td style={{ border: '1px dotted black', padding: '10px' }}>{item.quantity}</td>
                                                 <td style={{ border: '1px dotted black', padding: '10px' }}>${item.unitPrice}</td>
-                                                <td style={{ border: '1px dotted black', padding: '10px' }}>
-                                                    ${item.unitPrice * item.quantity}
-                                                </td>
+                                                <td style={{ border: '1px dotted black', padding: '10px' }}>${item.unitPrice * item.quantity}</td>
                                             </tr>
                                         ))}
                                     </tbody>
@@ -323,9 +328,9 @@ export default function TableOrders() {
                         </>
                     )}
                 </div>
+                <Button text="📄 Export PDF" onClick={() => exportCustomFormToPDF()} />
+            </Popup>
 
-                <Button text="📄 Xuất PDF" onClick={() => exportCustomFormToPDF()} />
-            </div >
             <h3>List Orders</h3>
 
             <DataGrid
