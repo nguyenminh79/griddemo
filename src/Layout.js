@@ -1,49 +1,3 @@
-// // src/Layout.js
-// import React, { useState } from 'react';
-// import Drawer from 'devextreme-react/drawer';
-// import List from 'devextreme-react/list';
-// import { Outlet, useNavigate, useLocation } from 'react-router-dom';
-
-
-
-// export default function Layout() {
-//   const [open, setOpen] = useState(true);
-//   const navigate = useNavigate();
-//   const location = useLocation();
-
-//   const selectedIndex = menuItems.findIndex(item => location.pathname.startsWith(item.path));
-
-//   return (
-//     <Drawer
-//       opened={open}
-//       openedStateMode="shrink"
-//       position="before"
-//       component={() => (
-//         <List
-//           items={menuItems}
-//           selectedItemKeys={[menuItems[selectedIndex]?.text]}
-//           onItemClick={(e) => {
-//             navigate(e.itemData.path);
-//             setOpen(true);
-//           }}
-//           itemRender={(item) => (
-//             <div style={{ padding: '10px', cursor: 'pointer' }}>
-//               {item.text}
-//             </div>
-//           )}
-//         />
-//       )
-//       }
-//     >
-//       <div style={{ padding: '20px' }}>
-//         <Outlet />
-//       </div>
-//     </Drawer>
-//   );
-// }
-
-
-// src/HeaderLayout.js
 import React from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import './HeaderLayout.css'; // style riêng cho header nếu cần
@@ -54,6 +8,7 @@ const menuItems = [
   { text: 'Product', path: '/product' },
   { text: 'Order', path: '/order' },
   { text: 'Order Detail', path: '/order-detail' },
+  { text: 'Risk Accordion', path: '/risk-accordion' },
 ];
 
 const handleClick = () => {
